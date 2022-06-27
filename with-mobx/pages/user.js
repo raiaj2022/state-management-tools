@@ -1,24 +1,20 @@
+import { observer } from "mobx-react-lite";
 import { NavBar } from "../components/navBar";
+import { charactersStore } from "../mobx/CharactersStore";
+import React from "react";
 
-export async function getServerSideProps() {
-  const res = await fetch(
-    "https://rickandmortyapi.com/api/character"
-  );
-  return {
-    props: {
-      characters: await res.json(),
-    },
-  };
-}
+const User = observer(() => {
+  const { characters } = charactersStore;
 
-export default function User(props) {
   return (
     <>
       <NavBar />
-      <h1>Home Page</h1>
-      {props.characters.results.map((character) => {
-        return <p key={character.id}>{character.name}</p>
+      <h1>User Page</h1>
+      {characters.map((character) => {
+        return <p key={character.id}>{character.getName}</p>
       })}
     </>
   )
-}
+});
+
+export default User;

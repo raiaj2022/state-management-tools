@@ -1,24 +1,27 @@
 import { NavBar } from "../components/navBar";
+import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { charactersStore } from "../mobx/CharactersStore";
 
-export async function getServerSideProps() {
-  const res = await fetch(
-    "https://rickandmortyapi.com/api/character"
-  );
-  return {
-    props: {
-      characters: await res.json(),
-    },
-  };
-}
+const Home = observer(() => {
+  const { characters } = charactersStore;
 
-export default function Home(props) {
+  useEffect(() => {
+    (async () => {
+      await charactersStore.fetchCharacters();
+    })()
+  }, [])
+
   return (
     <>
       <NavBar />
       <h1>Home Page</h1>
-      {props.characters.results.map((character) => {
-        return <p key={character.id}>{character.name}</p>
-      })}
+      {characters.map((character) => (
+          <p key={character.id}>{character.getName}</p>
+      ))}
     </>
   )
-}
+  
+})
+
+export default Home;
