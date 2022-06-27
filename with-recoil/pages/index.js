@@ -1,22 +1,29 @@
 import { NavBar } from "../components/navBar";
+import { atom } from "recoil";
+import { useRecoilState } from "recoil";
+import { useEffect } from "react";
 
-export async function getServerSideProps() {
-  const res = await fetch(
-    "https://rickandmortyapi.com/api/character"
-  );
-  return {
-    props: {
-      characters: await res.json(),
-    },
-  };
-}
+export const charactersState = atom({
+  key: 'charactersState',
+  default: ''
+})
 
-export default function Home(props) {
+export default function Home() {
+  const [characters, setCharacters] = useRecoilState(charactersState);
+
+  useEffect(() => {
+    (async () => {
+      let response = await fetch("https://rickandmortyapi.com/api/character")
+        .then((res) => res.json());
+      setCharacters(response);
+    })()
+  }, [])
+
   return (
     <>
       <NavBar />
       <h1>Home Page</h1>
-      {props.characters.results.map((character) => {
+      {characters.results?.map((character) => {
         return <p key={character.id}>{character.name}</p>
       })}
     </>
