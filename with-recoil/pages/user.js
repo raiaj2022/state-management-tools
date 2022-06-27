@@ -11,11 +11,11 @@ export async function getServerSideProps() {
   };
 }
 
-export default function Home(props) {
+export default function User(props) {
   return (
     <>
       <NavBar />
-      <h1>Home Page</h1>
+      <h1>User Page</h1>
       {props.characters.results.map((character) => {
         return <p key={character.id}>{character.name}</p>
       })}
